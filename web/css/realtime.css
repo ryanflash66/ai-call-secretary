@@ -1,0 +1,267 @@
+/* Real-time Updates Styles */
+
+/* Notifications */
+.notifications-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 300px;
+  max-width: 100%;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.notification {
+  background: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: flex-start;
+  transform: translateX(110%);
+  transition: transform 0.3s ease;
+  pointer-events: auto;
+  max-width: 100%;
+  border-left: 4px solid var(--info-color);
+}
+
+.notification.show {
+  transform: translateX(0);
+}
+
+.notification.fade-out {
+  transform: translateX(110%);
+}
+
+.notification.success {
+  border-left-color: var(--success-color);
+}
+
+.notification.error {
+  border-left-color: var(--danger-color);
+}
+
+.notification.warning {
+  border-left-color: var(--warning-color);
+}
+
+.notification.info {
+  border-left-color: var(--info-color);
+}
+
+.notification-icon {
+  margin-right: 12px;
+  font-size: 20px;
+  color: var(--info-color);
+}
+
+.notification.success .notification-icon {
+  color: var(--success-color);
+}
+
+.notification.error .notification-icon {
+  color: var(--danger-color);
+}
+
+.notification.warning .notification-icon {
+  color: var(--warning-color);
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-message {
+  margin: 0;
+  color: var(--text-dark);
+  font-size: 14px;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0;
+  margin-left: 8px;
+  font-size: 16px;
+  transition: color 0.2s;
+}
+
+.notification-close:hover {
+  color: var(--text-dark);
+}
+
+/* Real-time Updates Card */
+.realtime-card {
+  grid-column: span 2;
+}
+
+.realtime-updates {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.realtime-update {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.realtime-update:last-child {
+  border-bottom: none;
+}
+
+.update-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.realtime-update.call .update-icon {
+  color: var(--primary-color);
+}
+
+.realtime-update.message .update-icon {
+  color: var(--info-color);
+}
+
+.realtime-update.appointment .update-icon {
+  color: var(--success-color);
+}
+
+.realtime-update.system .update-icon {
+  color: var(--secondary-color);
+}
+
+.update-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.update-message {
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: var(--text-dark);
+}
+
+.update-time {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.loading-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid var(--primary-color);
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+}
+
+.loading-message {
+  margin-top: 16px;
+  color: white;
+  font-size: 16px;
+}
+
+/* WebSocket Status */
+.status-indicator.warning {
+  background-color: var(--warning-color);
+}
+
+.status-indicator.error {
+  background-color: var(--danger-color);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Notification Badge */
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: var(--danger-color);
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Notification Sounds Preload */
+audio.preload {
+  display: none;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .notifications-container {
+    width: calc(100% - 40px);
+    top: 10px;
+    right: 10px;
+  }
+  
+  .realtime-card {
+    grid-column: span 1;
+  }
+}

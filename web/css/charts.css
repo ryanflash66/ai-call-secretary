@@ -1,0 +1,131 @@
+/* Charts Styles */
+
+.charts-section {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.charts-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.chart-card {
+  background-color: var(--card-bg);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.chart-card .card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.chart-card .card-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.chart-card .card-content {
+  padding: 1rem;
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 250px;
+}
+
+/* Chart-specific styles */
+#call-volume-chart {
+  background-color: rgba(79, 70, 229, 0.02);
+}
+
+#call-duration-chart {
+  background-color: rgba(6, 182, 212, 0.02);
+}
+
+#message-distribution-chart {
+  background-color: rgba(59, 130, 246, 0.02);
+}
+
+#appointment-schedule-chart {
+  background-color: rgba(16, 185, 129, 0.02);
+}
+
+/* Loading and error states */
+.chart-loading,
+.chart-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.chart-loading {
+  background-color: var(--bg-color);
+}
+
+.chart-error {
+  background-color: rgba(239, 68, 68, 0.05);
+  color: var(--danger-color);
+}
+
+/* Chart legend styles */
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--text-dark);
+}
+
+.legend-color {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
+  border-radius: 2px;
+}
+
+/* No data message */
+.no-data-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .chart-container {
+    height: 200px;
+  }
+}

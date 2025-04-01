@@ -1,0 +1,2 @@
+<link rel="stylesheet" href="css/charts.css">
+<link rel="stylesheet" href="css/realtime.css">
