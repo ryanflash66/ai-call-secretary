@@ -1,0 +1,178 @@
+# Default configuration for AI Call Secretary
+
+# General application settings
+app:
+  name: "AI Call Secretary"
+  log_level: "info"
+  data_dir: "./data"
+
+# Telephony configuration
+telephony:
+  # FreeSwitch connection
+  freeswitch:
+    host: "127.0.0.1"
+    port: 8021
+    password: "ClueCon"
+    timeout: 10
+  
+  # Call routing rules
+  routing_rules:
+    - name: "VIP callers"
+      number_pattern: "^(1555123|1555456).*$"
+      action: "priority"
+      params:
+        level: "vip"
+    
+    - name: "Known spam"
+      number_pattern: "^1555999.*$"
+      action: "reject"
+      params:
+        reason: "known_spam"
+    
+    - name: "After-hours handling"
+      condition: "after_hours"
+      action: "voicemail"
+      params:
+        greeting: "after_hours"
+  
+  # Blacklist and whitelist
+  blacklist:
+    - "^1555888.*$"
+    - "^1555777.*$"
+  
+  whitelist:
+    - "^1555111.*$"
+    - "^1555222.*$"
+  
+  # Business hours
+  business_hours:
+    start: "09:00"
+    end: "17:00"
+    timezone: "America/New_York"
+    days:
+      - "Monday"
+      - "Tuesday"
+      - "Wednesday"
+      - "Thursday"
+      - "Friday"
+
+# LLM configuration
+llm:
+  provider: "ollama"
+  model: "mistral"
+  temperature: 0.7
+  system_prompt: "You are an AI assistant for a call answering service. Your job is to professionally greet callers, understand their requests, and take appropriate actions."
+  max_tokens: 500
+  timeout: 15
+  api_url: "http://localhost:11434/api"
+  
+  # Context management settings
+  context:
+    max_history: 20
+    token_limit: 4000
+    context_type: "call_answering"
+  
+  # Custom prompts can be added here
+  prompts:
+    # Override default prompts or add new ones
+    customer_greeting: |
+      You are a friendly AI assistant for {business_name}. Your name is {assistant_name}.
+      Your job is to provide a warm, professional greeting to callers and help them with their requests.
+      
+      Caller information:
+      - Name: {caller_name}
+      - Number: {caller_number}
+      
+      Always maintain a positive, helpful tone and represent {business_name} with professionalism.
+
+# Voice processing
+voice:
+  # Speech-to-text
+  stt:
+    engine: "whisper"
+    model: "tiny"
+    language: "en"
+  
+  # Text-to-speech
+  tts:
+    engine: "sesame"
+    voice: "default"
+    rate: 1.0
+    pitch: 1.0
+  
+  # Voice cloning
+  voice_clone:
+    enabled: false
+    training_samples: 5
+    training_time: 300
+
+# Workflow configuration
+workflow:
+  # Conversation flow settings
+  flows:
+    default_flow: "general"
+    
+    # Custom flows (in addition to built-ins)
+    custom_flows: {}
+    
+    # Flow transitions
+    allowed_transitions:
+      - from: "general"
+        to: ["appointment", "message", "info", "escalation"]
+      - from: "appointment"
+        to: ["general", "message", "escalation"]
+      - from: "message"
+        to: ["general", "appointment", "escalation"]
+      - from: "info"
+        to: ["general", "appointment", "message", "escalation"]
+      - from: "escalation"
+        to: []
+  
+  # Action handling
+  actions:
+    # Appointment settings
+    appointment:
+      default_duration: 30
+      min_notice: 2 # hours
+      available_slots:
+        - day: "Monday"
+          hours: ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"]
+        - day: "Tuesday"
+          hours: ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"]
+        - day: "Wednesday"
+          hours: ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"]
+        - day: "Thursday"
+          hours: ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"]
+        - day: "Friday"
+          hours: ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"]
+    
+    # Message settings
+    message:
+      prioritize_by:
+        - "urgency"
+        - "callback_requested"
+      notification:
+        email: true
+        sms: true
+    
+    # Escalation settings
+    escalation:
+      departments:
+        general: "+15551234567"
+        support: "+15552345678"
+        sales: "+15553456789"
+        billing: "+15554567890"
+        emergency: "+15555678901"
+      
+      specific_people:
+        "John Doe": "+15556789012"
+        "Jane Smith": "+15567890123"
+
+# API settings
+api:
+  host: "0.0.0.0"
+  port: 8080
+  token_expiry: 86400
+  cors_origins:
+    - "http://localhost:8080"
+    - "https://example.com"

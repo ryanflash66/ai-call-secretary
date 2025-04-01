@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<document type="freeswitch/xml">
+  <section name="configuration">
+    <configuration name="switch.conf" description="Core Configuration">
+      <settings>
+        <param name="colorize-console" value="true"/>
+        <param name="max-sessions" value="1000"/>
+        <param name="sessions-per-second" value="30"/>
+        <param name="loglevel" value="debug"/>
+      </settings>
+    </configuration>
+    
+    <configuration name="modules.conf" description="Modules">
+      <modules>
+        <load module="mod_sofia"/>
+        <load module="mod_spandsp"/>
+        <load module="mod_dialplan_xml"/>
+        <load module="mod_commands"/>
+        <load module="mod_dptools"/>
+        <load module="mod_httapi"/>
+        <load module="mod_audio_fork"/>
+        <load module="mod_python"/>
+      </modules>
+    </configuration>
+  </section>
+  
+  <section name="dialplan" description="Dialplan">
+    <context name="default">
+      <extension name="ai_secretary">
+        <condition field="destination_number" expression="^(\d+)$">
+          <action application="answer"/>
+          <action application="sleep" data="500"/>
+          <action application="python" data="call_handler"/>
+        </condition>
+      </extension>
+    </context>
+  </section>
+  
+  <section name="sofia" description="SIP Configuration">
+    <profile name="internal">
+      <settings>
+        <param name="debug" value="1"/>
+        <param name="sip-ip" value="0.0.0.0"/>
+        <param name="sip-port" value="5060"/>
+        <param name="context" value="default"/>
+        <param name="rtp-ip" value="0.0.0.0"/>
+        <param name="dialplan" value="XML"/>
+      </settings>
+    </profile>
+    <profile name="external">
+      <settings>
+        <param name="debug" value="1"/>
+        <param name="sip-ip" value="0.0.0.0"/>
+        <param name="sip-port" value="5080"/>
+        <param name="context" value="public"/>
+        <param name="rtp-ip" value="0.0.0.0"/>
+        <param name="dialplan" value="XML"/>
+      </settings>
+      <gateways>
+        <gateway name="sip_trunk">
+          <!-- SIP trunk configuration to be updated with provider details -->
+          <param name="realm" value="sip-provider.example.com"/>
+          <param name="username" value="username"/>
+          <param name="password" value="password"/>
+          <param name="register" value="true"/>
+          <param name="retry-seconds" value="30"/>
+          <param name="ping" value="30"/>
+        </gateway>
+      </gateways>
+    </profile>
+  </section>
+</document>
