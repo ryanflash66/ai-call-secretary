@@ -14,7 +14,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.8'
+        python-version: '3.9'
     - name: Check for encoding issues
       run: |
         python scripts/fix_encoding.py src
@@ -23,15 +23,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev portaudio19-dev ffmpeg
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.8'
+        python-version: '3.9'
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install flake8 mypy black isort
-        pip install -r requirements.txt
+        # Install build dependencies first
+        pip install setuptools wheel Cython scikit-build
+        # Install CI-specific dependencies
+        pip install -r requirements-ci.txt
     - name: Lint with flake8
       run: |
         flake8 src tests
@@ -48,15 +55,22 @@ jobs:
     needs: [check-encoding, lint]
     steps:
     - uses: actions/checkout@v3
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev portaudio19-dev ffmpeg
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.8'
+        python-version: '3.9'
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pytest pytest-asyncio pytest-cov
-        pip install -r requirements.txt
+        # Install build dependencies first
+        pip install setuptools wheel Cython scikit-build
+        # Install CI-specific dependencies
+        pip install -r requirements-ci.txt
     - name: Test with pytest
       run: |
         PYTHONPATH=. pytest tests/ --cov=src/ --cov-report=xml

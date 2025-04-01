@@ -1,4 +1,4 @@
-# Core dependencies
+# Core CI requirements
 fastapi>=0.103.1
 uvicorn>=0.23.2
 pydantic>=2.3.0
@@ -24,14 +24,12 @@ opentelemetry-sdk>=1.12.0
 redis>=4.6.0
 aioredux>=0.1.2
 
-# Telephony
-ESL>=0.4  # FreeSWITCH Event Socket Library
+# Telephony - minimal version for CI
+ESL>=0.4
 
-# LLM and voice processing
+# LLM minimal requirements for CI
 ollama>=0.1.4
 openai>=0.28.0
-openai-whisper>=20230314
-TTS>=0.8.0,<0.15.0  # Use a version available on PyPI
 
 # Web and HTTP utilities
 starlette>=0.27.0
@@ -42,8 +40,7 @@ itsdangerous>=2.1.2
 # Utilities
 python-slugify>=5.0.0
 pytz>=2022.1
-pydub>=0.25.1
-numpy>=1.22.0  # Leave numpy version as is
+numpy>=1.22.0
 pandas>=1.4.0
 
 # Development dependencies
