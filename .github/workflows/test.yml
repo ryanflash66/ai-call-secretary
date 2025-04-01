@@ -2,67 +2,87 @@ name: Tests
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [main, dev]
   pull_request:
-    branches: [ main, dev ]
+    branches: [main, dev]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9]
+        python-version: [3.9, 3.10, 3.11]
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-        cache: 'pip'
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -r tests/requirements-test.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r tests/requirements-test.txt
 
-    - name: Install Playwright browsers
-      run: |
-        playwright install chromium
+      - name: Install Playwright browsers
+        run: |
+          playwright install chromium
 
-    - name: Run unit tests
-      run: |
-        pytest tests/test_*.py -v
+      - name: Run unit tests
+        run: |
+          pytest tests/test_*.py -v
 
-    - name: Run integration tests
-      run: |
-        pytest tests/integration -v
+      - name: Run integration tests
+        run: |
+          pytest tests/integration -v
 
-    - name: Run end-to-end tests
-      run: |
-        pytest tests/end_to_end -v
+      - name: Run end-to-end tests
+        run: |
+          pytest tests/end_to_end -v
 
-    - name: Build web interface
-      run: |
-        cd web
-        # No build step needed for pure HTML/CSS/JS
+      - name: Build web interface
+        run: |
+          cd web
+          # Validate HTML and CSS (minimal build step)
+          pip install html-validator-cli cssutils
+          html-validator *.html
+          python -c "import cssutils; cssutils.parseFile('css/style.css')"
 
-    - name: Run UI tests
-      run: |
-        # Start the server in the background
-        python -m src.app --port 8080 &
-        sleep 5  # Wait for server to start
-        # Run UI tests
-        pytest tests/ui -v
-        
-    - name: Generate coverage report
-      run: |
-        pytest tests/ --cov=src --cov-report=xml
+      - name: Run UI tests
+        run: |
+          # Start the server in the background
+          python -m src.app --port 8080 &
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage.xml
-        fail_ci_if_error: false
+          # Wait for server to be ready using a healthcheck endpoint
+          MAX_ATTEMPTS=30
+          DELAY=1
+          attempt=0
+          echo "Waiting for API service to be ready..."
+          until $(curl --output /dev/null --silent --fail http://localhost:8080/health || [ $attempt -eq $MAX_ATTEMPTS ]); do
+            printf '.'
+            attempt=$((attempt+1))
+            sleep $DELAY
+          done
+
+          if [ $attempt -lt $MAX_ATTEMPTS ]; then
+            echo "API is ready!"
+            # Run UI tests
+            pytest tests/ui -v
+          else
+            echo "API failed to start!"
+            exit 1
+          fi
+
+      - name: Generate coverage report
+        run: |
+          pytest tests/ --cov=src --cov-report=xml --cov-fail-under=70
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.xml
+          fail_ci_if_error: false
