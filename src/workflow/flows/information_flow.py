@@ -125,7 +125,7 @@ class InformationFlow(BaseFlow):
             return self.INFO_CATEGORIES['PRICING']
         
         # Check for contact
-        if re.search(r'(contact|email|phone|call|number|reach)', message):
+        if re.search(r'(contact|email|phone|call_|number|reach)', message):
             return self.INFO_CATEGORIES['CONTACT']
         
         # Check for staff
@@ -181,7 +181,7 @@ class InformationFlow(BaseFlow):
         if 'details' not in result or 'info' not in result['details']:
             return False
         
-        # If the info is "No specific information found", it's not resolved
+        # If the info is "No specific information found," it's not resolved
         if result['details']['info'] == "No specific information found for this query.":
             return False
         
