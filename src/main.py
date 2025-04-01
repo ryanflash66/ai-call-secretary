@@ -62,12 +62,19 @@ def parse_args():
         help="Enable debug mode"
     )
     
+    parser.add_argument(
+        "--dev-mode",
+        action="store_true",
+        help="Enable development mode (relaxes security)"
+    )
+    
     return parser.parse_args()
 
 
 def run_api(args):
     """Run the API server."""
-    from src.api import api_app
+    from src.api import app
+    from src.security import SecurityInitializer, security_config
     
     # Set config path as environment variable
     os.environ["CONFIG_PATH"] = args.config
@@ -75,10 +82,19 @@ def run_api(args):
     # Configure logging level
     log_level = "debug" if args.debug else "info"
     
+    # Set development mode if specified
+    if args.dev_mode:
+        os.environ["DEVELOPMENT_MODE"] = "true"
+        security_config.development_mode = True
+        logger.warning("Running in development mode - security restrictions relaxed")
+    
+    # Initialize security components
+    SecurityInitializer.initialize(app)
+    
     # Start API server
     logger.info(f"Starting API server on {args.host}:{args.port}")
     uvicorn.run(
-        "src.api.routes:app",
+        "src.api.app:app",
         host=args.host,
         port=args.port,
         reload=args.debug,
@@ -112,6 +128,11 @@ def main():
     if args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
     
+    # Set development mode if specified
+    if args.dev_mode:
+        os.environ["DEVELOPMENT_MODE"] = "true"
+        logger.warning("Running in development mode - security restrictions relaxed")
+    
     try:
         if args.mode == "api":
             run_api(args)
@@ -129,6 +150,14 @@ def main():
                 concurrent.futures.wait(executor._pending_work_items)
     except KeyboardInterrupt:
         logger.info("Shutting down AI Call Secretary")
+        
+        # Shutdown security components
+        try:
+            from src.security import SecurityInitializer
+            SecurityInitializer.shutdown()
+        except Exception as e:
+            logger.error(f"Error shutting down security components: {e}", exc_info=True)
+            
     except Exception as e:
         logger.error(f"Error running AI Call Secretary: {e}", exc_info=True)
         sys.exit(1)
