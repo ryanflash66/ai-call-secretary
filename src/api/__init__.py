@@ -1,7 +1,7 @@
 """
 API package for the AI Call Secretary.
 """
-from src.api.routes import app as api_app
+from src.api.app import app
 from src.api.schemas import (
     CallDetail, CallSummary, CallListResponse, ActionRequest, ActionResult,
     AppointmentRequest, MessageRequest, CallFilterParams, SystemStatus,
@@ -9,7 +9,7 @@ from src.api.schemas import (
 )
 
 __all__ = [
-    'api_app',
+    'app',
     'CallDetail',
     'CallSummary',
     'CallListResponse',
