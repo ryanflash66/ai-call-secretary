@@ -31,7 +31,7 @@ ESL>=0.4  # FreeSWITCH Event Socket Library
 ollama>=0.1.4
 openai>=0.28.0
 whisper>=1.1.10
-TTS==0.14.3  # Fixed version known to work with numpy>=1.22.0
+TTS==0.15.0  # Updated version that should be compatible with numpy>=1.22.0
 
 # Web and HTTP utilities
 starlette>=0.27.0
@@ -43,7 +43,7 @@ itsdangerous>=2.1.2
 python-slugify>=5.0.0
 pytz>=2022.1
 pydub>=0.25.1
-numpy>=1.22.0  # Updated to a version compatible with TTS==0.14.3
+numpy>=1.22.0  # Leave numpy version as is
 pandas>=1.4.0
 
 # Development dependencies
