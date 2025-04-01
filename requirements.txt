@@ -31,7 +31,7 @@ ESL>=0.4  # FreeSWITCH Event Socket Library
 ollama>=0.1.4
 openai>=0.28.0
 openai-whisper>=20230314
-TTS>=0.8.0,<0.15.0  # Use a version available on PyPI
+# TTS temporarily commented out for CI compatibility
 
 # Web and HTTP utilities
 starlette>=0.27.0
@@ -58,5 +58,5 @@ flake8>=6.1.0
 # Build dependencies
 setuptools>=65.5.1
 wheel>=0.38.4
-Cython>=0.29.33
+Cython==0.29.28  # Fixed version for compatibility with TTS
 scikit-build>=0.15.0
