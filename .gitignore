@@ -1,0 +1,141 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+.venv
+venv/
+ENV/
+env/
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.npm/
+.pnp/
+.pnp.js
+coverage/
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# AI Call Secretary specific
+.env
+data/
+logs/
+keys/
+deployment/ssl/*.pem
+*.db
+*.sqlite3
+*.sqlite
+*.log
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# SSL certificates
+*.pem
+*.key
+*.crt
+*.csr
+*.cert
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.directory
+._*
+*~
+
+# IDE-specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+.vs/
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.settings/
+.ipynb_checkpoints
+*.code-workspace
+!ai-call-secretary.code-workspace
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+temp/
+tmp/
+
+# Audio and ML model files
+*.mp3
+*.wav
+*.ogg
+*.m4a
+*.onnx
+*.pt
+*.h5
+*.hdf5
+*.model
+
+# Compiled files
+*.class
+*.dll
+*.exe
+*.o
+*.obj
+*.so
+*.jar
+*.war
+*.ear
+
+# Documentation builds
+docs/_build/
+docs/api/
+docs/html/
+site/
+public/
+
+# Local development configuration
+.env.local
+.env.dev
+
+# Cache directories
+.mypy_cache/
+.ruff_cache/
+.cache/
+__pypackages__/
