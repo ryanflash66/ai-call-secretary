@@ -1,9 +1,1 @@
-pytest==7.4.0
-pytest-asyncio==0.21.1
-pytest-cov==4.1.0
-pytest-xvfb==2.0.0
-playwright==1.37.0
-httpx==0.24.1
-mock==5.1.0
-coverage==7.3.0
-async-timeout==4.0.3
+祰整瑳㴽⸷⸴ਰ祰整瑳愭祳据潩㴽⸰ㄲㄮ瀊瑹獥⵴潣㵶㐽ㄮ〮瀊瑹獥⵴癸扦㴽⸲⸰ਰ汰祡牷杩瑨㴽⸱㜳〮栊瑴硰㴽⸰㐲ㄮ洊捯㵫㔽ㄮ〮挊癯牥条㵥㜽㌮〮愊祳据琭浩潥瑵㴽⸴⸰ਲ਼
